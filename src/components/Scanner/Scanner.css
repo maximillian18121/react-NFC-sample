@@ -3,7 +3,7 @@
   z-index: 1;
   top: calc(50vh - 175px);
   border-radius: 15px;
-  background-color: #fff;
+  background-color: rgb(252, 183, 183);
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
 }
 
@@ -26,3 +26,7 @@
 .scanner-image {
   height: 20vmin;
 }
+.scanner-text{
+  font-weight: bold;
+  text-align: center;
+  }

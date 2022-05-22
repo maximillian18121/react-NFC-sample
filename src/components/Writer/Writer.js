@@ -1,13 +1,13 @@
-import React from 'react';
+import React,{useState} from 'react';
 import './Writer.css';
 import Save from '../SVGs/save';
 
 const Writer = ({writeFn}) => {
-    const [message, setMessage] = React.useState('');
+    const [Message, setMessage] = useState('');
 
     const onSave = (e) => {
         e.preventDefault();
-        writeFn(message);
+        writeFn(Message);
         setMessage('');
     };
 
@@ -15,7 +15,7 @@ const Writer = ({writeFn}) => {
       <>
         <form onSubmit={onSave}>
             <div className="writer-container">
-                <input type="text" placeholder="Enter Message..." value={message} onChange={(e)=>setMessage(e.target.value)}></input>
+                <input type="text" placeholder="Enter URL..." value={Message} onChange={(e)=>setMessage(e.target.value)}></input>
                 <button className="btn" type="submit">
                     <Save/>
                     Save

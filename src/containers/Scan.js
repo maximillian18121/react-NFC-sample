@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState, useRef } from 'react';
 import Scanner from '../components/Scanner/Scanner';
 import { ActionsContext } from '../contexts/context';
 
@@ -6,6 +6,9 @@ const Scan = () => {
     const [message, setMessage] = useState('');
     const [serialNumber, setSerialNumber] = useState('');
     const { actions, setActions} = useContext(ActionsContext);
+
+    let [Error,setError] = useState("Scanning....");
+    
 
     const scan = useCallback(async() => {
 
@@ -16,7 +19,7 @@ const Scan = () => {
                 
                 console.log("Scan started successfully.");
                 ndef.onreadingerror = () => {
-                    console.log("Cannot read data from the NFC tag. Try another one?");
+                    setError("Cannot read data from the NFC tag. Try another one?");
                 };
                 
                 ndef.onreading = event => {
@@ -26,16 +29,24 @@ const Scan = () => {
                         scan: 'scanned',
                         write: null
                     });
+                    
                 };
 
             } catch(error){
                 console.log(`Error! Scan failed to start: ${error}.`);
+                setError("!! Enable NFC on your device !!")
+                
             };
         }
+        else{
+            setError("!! Browser and Device not compatible !!");
+        }
     },[setActions]);
+    console.log(Error);
 
     const onReading = ({message, serialNumber}) => {
         setSerialNumber(serialNumber);
+        const decoder = new TextDecoder();
         for (const record of message.records) {
             switch (record.recordType) {
                 case "text":
@@ -43,7 +54,7 @@ const Scan = () => {
                     setMessage(textDecoder.decode(record.data));
                     break;
                 case "url":
-                    // TODO: Read URL record with record data.
+                     setMessage(decoder.decode(record.data));
                     break;
                 default:
                     // TODO: Handle other records with record data.
@@ -55,6 +66,7 @@ const Scan = () => {
         scan();
     }, [scan]);
 
+
     return(
         <>
             {actions.scan === 'scanned' ?  
@@ -62,7 +74,9 @@ const Scan = () => {
                 <p>Serial Number: {serialNumber}</p>
                 <p>Message: {message}</p>
             </div>
-            : <Scanner status={actions.scan}></Scanner> }
+            : <Scanner status={actions.scan} Error = {Error} ></Scanner>
+            
+            }
         </>
     );
 };

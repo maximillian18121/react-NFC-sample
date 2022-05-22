@@ -3,7 +3,7 @@ import './Scanner.css'
 import Spinner from '../../spinner.gif';
 import { ActionsContext } from '../../contexts/context';
 
-const Scanner = () => {
+const Scanner = (props) => {
   const { actions, setActions} = useContext(ActionsContext);
     return (
       <div className="scanner">
@@ -11,7 +11,7 @@ const Scanner = () => {
         <div className="scanner-container">
           <img src={Spinner} alt="spinning log" className="scanner-image"/>
           <p className="scanner-text">
-            Scanning...
+            {props.Error}
           </p>
         </div>
       </div>
